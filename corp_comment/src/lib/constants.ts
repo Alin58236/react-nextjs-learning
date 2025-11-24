@@ -1,1 +1,1 @@
-export const MAX_CHARS = 150;
+export const MAX_CHARACTERS = 150;

@@ -1,31 +1,33 @@
-import React, { createContext, useEffect, useMemo, useState } from "react";
-import { TFeedbackItem } from "../types/types";
+import { createContext, useMemo, useState } from "react";
+import { useFeedbackItems } from "../lib/hooks";
+import { TFeedbackItem } from "../lib/types";
 
 
-
-// created the context in this react component so that it can be 
-// used in other components without the need to prop drill
-
-type TFeedbackItemContextProviderProps = {
-  children: React.ReactNode
+type FeedbackItemsContextProviderProps = {
+  children: React.ReactNode;
 };
- 
+
 type TFeedbackItemsContext = {
-  feedbackItems: TFeedbackItem[];
+  filteredFeedbackItems: TFeedbackItem[];
   isLoading: boolean;
   errorMessage: string;
   companyList: string[];
   handleAddToList: (text: string) => void;
+  handleSelectCompany: (company: string) => void;
 };
 
-export const FeedbackItemsContext = createContext<TFeedbackItemsContext | null>(null);
+export const FeedbackItemsContext = createContext<TFeedbackItemsContext | null>(
+  null
+);
 
-const FeedbackItemsContextProvider = ({children}: TFeedbackItemContextProviderProps ) => {
-  const [feedbackItems, setFeedbackItems] = useState<TFeedbackItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+export default function FeedbackItemsContextProvider({
+  children,
+}: FeedbackItemsContextProviderProps) {
+  const { feedbackItems, isLoading, errorMessage, setFeedbackItems } =
+    useFeedbackItems();
+  const [selectedCompany, setSelectedCompany] = useState("");
 
-  const companyList: string[] = useMemo(
+  const companyList = useMemo(
     () =>
       feedbackItems
         .map((item) => item.company)
@@ -34,110 +36,61 @@ const FeedbackItemsContextProvider = ({children}: TFeedbackItemContextProviderPr
         }),
     [feedbackItems]
   );
+  const filteredFeedbackItems = useMemo(
+    () =>
+      selectedCompany
+        ? feedbackItems.filter(
+            (feedbackItem) => feedbackItem.company === selectedCompany
+          )
+        : feedbackItems,
+    [feedbackItems, selectedCompany]
+  );
 
-  const handleAddToList = (text: string) => {
+  const handleAddToList = async (text: string) => {
     const companyName = text
       .split(" ")
-      .find((word: string) => word.includes("#"))!
+      .find((word) => word.includes("#"))!
       .substring(1);
 
     const newItem: TFeedbackItem = {
       id: new Date().getTime(),
-      upvoteCount: 0,
-      company: companyName,
-      badgeLetter: companyName.charAt(0).toUpperCase(),
       text: text,
+      upvoteCount: 0,
       daysAgo: 0,
+      company: companyName,
+      badgeLetter: companyName.substring(0, 1).toUpperCase(),
     };
 
     setFeedbackItems([...feedbackItems, newItem]);
-    //send to server
 
-    fetch("https://bytegrad.com/course-assets/corpcomment/api/feedbacks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newItem),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Successfully added feedback:", data);
-      })
-      .catch((error) => {
-        console.error("Error adding feedback:", error);
-      });
-  };
-
-  useEffect(() => {
-    const fetchFeedbacks = async () => {
-      setIsLoading(true);
-
-      try {
-        const response = await fetch(
-          "https://bytegrad.com/course-assets.projects/corpcomment/api/feedbacks"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setFeedbackItems(data.feedbacks);
-      } catch (error) {
-        setErrorMessage("Something went wrong while fetching data.");
-        console.error(errorMessage);
+    await fetch(
+      "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks",
+      {
+        method: "POST",
+        body: JSON.stringify(newItem),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       }
-
-      setIsLoading(false);
-    };
-
-    fetchFeedbacks();
-
-    {
-      /* Old promise-based approach 
-    // setIsLoading(true);
-    // fetch(
-    //   "https://bytegrad.com/course-assets.projects/corpcomment/api/feedbacks"
-    // )
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Network response was not ok");
-    //     } else {
-    //       return response.json();
-    //     }
-    //   })
-    //   .then((data) => {
-    //     setFeedbackItems(data.feedbacks);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     setErrorMessage(
-    //       error.message || "Something went wrong while fetching data."
-    //     );
-    //     console.error(errorMessage);
-    //     setIsLoading(false);
-    //   });
-    */
-    }
-  }, []);
+    );
+  };
+  const handleSelectCompany = (company: string) => {
+    setSelectedCompany(company);
+  };
 
   return (
     <FeedbackItemsContext.Provider
       value={{
-        feedbackItems,
+        filteredFeedbackItems,
         isLoading,
         errorMessage,
         companyList,
         handleAddToList,
+        handleSelectCompany,
       }}
     >
       {children}
     </FeedbackItemsContext.Provider>
   );
-};
-
-export default FeedbackItemsContextProvider;
+}
