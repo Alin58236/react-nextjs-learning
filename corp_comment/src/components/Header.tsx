@@ -1,17 +1,20 @@
-import React from 'react'
 import Pattern from './Pattern'
 import Logo from './Logo'
 import PageHeading from './PageHeading'
 import FeedbackForm from './FeedbackForm'
 
-const Header = () => {
+type THeaderProps = {
+  handleAddToList: (text: string) => void;
+};
+
+const Header = ({handleAddToList}:THeaderProps) => {
   return (
     <header>
 
       <Pattern />
       <Logo />
       <PageHeading />
-      <FeedbackForm />
+      <FeedbackForm onAddToList={handleAddToList}/>
 
     </header>
   )

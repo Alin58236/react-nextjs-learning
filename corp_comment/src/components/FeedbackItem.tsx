@@ -1,22 +1,11 @@
 import { TriangleUpIcon } from '@radix-ui/react-icons'
-
-
-// Actual type for feedback item
-export type feedbackItem = {
-    id: number;
-    upvoteCount: number;
-    badgeLetter: string;
-    company: string;
-    text: string;
-    daysAgo: number;
-};
-
-// Props type for FeedbackItem component -> destructured so it can be passed as an object
-export type  feedbackItemProps = {feedbackItem : feedbackItem};
+import { TFeedbackItemProps } from '../types/types'
 
 
 
-const FeedbackItem = ( {feedbackItem}: feedbackItemProps) => {
+
+
+const FeedbackItem = ( {feedbackItem}: TFeedbackItemProps) => {
   return (
     <li key={feedbackItem.id} className="feedback">
         <button>
@@ -31,7 +20,7 @@ const FeedbackItem = ( {feedbackItem}: feedbackItemProps) => {
           <p>{feedbackItem.text}</p>
         </div>
 
-        <p>{feedbackItem.daysAgo}d</p>
+        <p>{feedbackItem.daysAgo==0?"NEW":feedbackItem.daysAgo+"d"}</p>
       </li>
   )
 }

@@ -1,6 +1,6 @@
-
 // Actual type for feedback item
-export type feedbackItem = {
+export type TFeedbackItem = {
+    id: number;
     upvoteCount: number;
     badgeLetter: string;
     company: string;
@@ -9,4 +9,4 @@ export type feedbackItem = {
 };
 
 // Props type for FeedbackItem component -> destructured so it can be passed as an object
-export type  feedbackItemProps = {feedbackItem : feedbackItem};
+export type TFeedbackItemProps = {feedbackItem : TFeedbackItem};
