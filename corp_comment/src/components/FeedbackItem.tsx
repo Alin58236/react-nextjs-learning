@@ -3,6 +3,7 @@ import { TriangleUpIcon } from '@radix-ui/react-icons'
 
 // Actual type for feedback item
 export type feedbackItem = {
+    id: number;
     upvoteCount: number;
     badgeLetter: string;
     company: string;
@@ -15,9 +16,9 @@ export type  feedbackItemProps = {feedbackItem : feedbackItem};
 
 
 
-const FeedbackItem = ({feedbackItem}: feedbackItemProps) => {
+const FeedbackItem = ( {feedbackItem}: feedbackItemProps) => {
   return (
-    <li className="feedback">
+    <li key={feedbackItem.id} className="feedback">
         <button>
           <TriangleUpIcon />
           <span>{feedbackItem.upvoteCount}</span>
