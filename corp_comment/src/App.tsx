@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Container from "./components/Container";
 import Footer from "./components/Footer";
 import HashtagList from "./components/HashtagList";
@@ -8,13 +8,27 @@ function App() {
   const [feedbackItems, setFeedbackItems] = useState<TFeedbackItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState<string>("");  
+  const [selectedCompany, setSelectedCompany] = useState<string>("");
 
-  const filteredFeedbackItems = selectedCompany ? feedbackItems.filter((item => item.company === selectedCompany)) : feedbackItems;
+  //wrapped the logic in useMemo to avoid unnecessary recalculations on each render
+  //basically just rerenders when feedbackItems or selectedCompany changes
+  const filteredFeedbackItems = useMemo(
+    () =>
+      selectedCompany
+        ? feedbackItems.filter((item) => item.company === selectedCompany)
+        : feedbackItems,
+    [feedbackItems, selectedCompany]
+  );
 
-  const companyList: string[] = feedbackItems.map((item) => item.company).filter((company, index, array) => {return array.indexOf(company) === index});
-
-  console.log("companyList:", companyList);
+  const companyList: string[] = useMemo(
+    () =>
+      feedbackItems
+        .map((item) => item.company)
+        .filter((company, index, array) => {
+          return array.indexOf(company) === index;
+        }),
+    [feedbackItems]
+  );
 
   const handleAddToList = (text: string) => {
     const companyName = text
@@ -34,16 +48,13 @@ function App() {
     setFeedbackItems([...feedbackItems, newItem]);
     //send to server
 
-    fetch(
-      "https://bytegrad.com/course-assets/corpcomment/api/feedbacks",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newItem),
-      }
-    )
+    fetch("https://bytegrad.com/course-assets/corpcomment/api/feedbacks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItem),
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -56,7 +67,6 @@ function App() {
       .catch((error) => {
         console.error("Error adding feedback:", error);
       });
-
   };
 
   useEffect(() => {
@@ -119,9 +129,13 @@ function App() {
         isLoading={isLoading}
         feedbackItems={filteredFeedbackItems}
         handleAddToList={handleAddToList}
-      /> 
+      />
 
-      <HashtagList selectedCompany={selectedCompany} setSelectedCompany={setSelectedCompany} companyList={companyList} />
+      <HashtagList
+        selectedCompany={selectedCompany}
+        setSelectedCompany={setSelectedCompany}
+        companyList={companyList}
+      />
     </div>
   );
 }

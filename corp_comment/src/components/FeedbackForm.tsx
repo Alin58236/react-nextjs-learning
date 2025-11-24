@@ -9,22 +9,35 @@ const FeedbackForm = ({onAddToList}:TFeedbackFormProps) => {
   
   const [text, setText] = useState("");
   const charCount = MAX_CHARS - text.length;
+  const [showValidIndicator, setShowValidIndicator] = useState(false);
+  const [showInvalidIndicator, setShowInvalidIndicator] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = event.target.value;
     if(newText.length > MAX_CHARS) return;
     setText(newText);
+    setShowValidIndicator(false);
+    setShowInvalidIndicator(false);
   };
 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    //basic validation to check if text includes a hashtag
+    //change classname from CSS to show error message
+    if(text.includes("#") && text.length >5){
+      setShowValidIndicator(true);
+    }else{
+      setShowInvalidIndicator(true)
+    }
+
     onAddToList(text);
     setText("");
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form">
+    <form onSubmit={handleSubmit} className={`form ${showValidIndicator ? 'form--valid' : ''} ${showInvalidIndicator ? 'form--invalid' : ''}`}>
       <textarea
         value={text}
         onChange={handleChange}
