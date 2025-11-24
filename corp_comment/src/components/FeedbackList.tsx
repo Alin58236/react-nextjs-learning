@@ -1,16 +1,20 @@
 import FeedbackItem from "./FeedbackItem";
 import Spinner from "./Spinner";
 import ErrorMessage from "./ErrorMessage";
-import { TFeedbackItem } from "../types/types";
+import { useContext } from "react";
+import { FeedbackItemsContext } from "../contexts/FeedbackItemsContextProvider";
 
 
-export type TFeedbackListProps = {
-  errorMessage:string ;
-  isLoading:boolean ;
-  feedbackItems: TFeedbackItem[]
-}
 
-const FeedbackList = ({errorMessage,isLoading,feedbackItems}:TFeedbackListProps) => {
+const FeedbackList = () => {
+
+  //access the created context values
+  const context = useContext(FeedbackItemsContext);
+  //mandatory! validate if context is not null
+  if (!context) {
+    throw new Error("FeedbackList must be used within a FeedbackItemsContextProvider");
+  }
+
   return (
     <ol className="feedback-list">
       <>
@@ -27,14 +31,14 @@ const FeedbackList = ({errorMessage,isLoading,feedbackItems}:TFeedbackListProps)
         ))} */}
       </>
 
-      {errorMessage ? <ErrorMessage message={errorMessage} /> : null}
+      {context.errorMessage ? <ErrorMessage message={context.errorMessage} /> : null}
 
-      {isLoading ? (
+      {context.isLoading ? (
         <Spinner />
       ) : (
         /* structured way with single object prop 
         const FeedbackItem = ({feedbackItem}: feedbackItemProps) */
-        feedbackItems.map((item) => <FeedbackItem feedbackItem={item} />)
+        context.feedbackItems.map((item) => <FeedbackItem feedbackItem={item} />)
       )}
     </ol>
   );
