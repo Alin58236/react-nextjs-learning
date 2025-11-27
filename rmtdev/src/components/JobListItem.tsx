@@ -1,0 +1,29 @@
+import { TJobItem } from "../types/types";
+import BookmarkIcon from "./BookmarkIcon";
+
+export default function JobListItem({jobItem}: {jobItem: TJobItem}) {
+  return (
+    <li key={jobItem.id} className="job-item">
+
+      {/* {the browser will actually refresh when clicking on the <a>
+        To prevent refreshing we can add a hashtag in front of the id
+      } */}
+
+
+
+      <a href={`#${jobItem.id.toString()}`} className="job-item__link">
+        <div className="job-item__badge">{jobItem.badgeLetters}</div>
+
+        <div className="job-item__middle">
+          <h3 className="third-heading">{jobItem.title}</h3>
+          <p className="job-item__company">{jobItem.company}</p>
+        </div>
+
+        <div className="job-item__right">
+          <BookmarkIcon />
+          <time className="job-item__time">{jobItem.daysAgo}</time>
+        </div>
+      </a>
+    </li>
+  );
+}
