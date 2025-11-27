@@ -1,9 +1,9 @@
 import { TJobItem } from "../types/types";
 import BookmarkIcon from "./BookmarkIcon";
 
-export default function JobListItem({jobItem}: {jobItem: TJobItem}) {
+export default function JobListItem({jobItem, isActive}: {jobItem: TJobItem, isActive:boolean}) {
   return (
-    <li key={jobItem.id} className="job-item">
+    <li key={jobItem.id} className={`job-item ${isActive ? 'job-item--active':''}`}>
 
       {/* {the browser will actually refresh when clicking on the <a>
         To prevent refreshing we can add a hashtag in front of the id

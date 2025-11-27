@@ -2,43 +2,47 @@ import { useEffect, useState } from "react";
 import { TJobDetails, TJobItem } from "../types/types";
 
 export function useJobItems(searchText: string) {
-    const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
-    const [jobItems, setJobItems] = useState<TJobItem[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+  const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
+  const [jobItems, setJobItems] = useState<TJobItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const jobItemsSliced = jobItems.slice(0, 7);
+  const jobItemsSliced = jobItems.slice(0, 7);
 
-    //not really recommended to use useEffect for this case
-    useEffect(() => {
-        setIsLoading(true);
-        if (searchText === "") return;
+  //not really recommended to use useEffect for this case
+  useEffect(() => {
+    setIsLoading(true);
+    if (searchText === "") return;
 
-        const fetchData = async () => {
-            const response = await fetch(`${apiUrl}?search=${searchText}`);
-            const data = await response.json();
-            console.log("Search Jobs Response:", data);
-            setIsLoading(false);
-            setJobItems(data.jobItems);
-        };
+    const fetchData = async () => {
+      const response = await fetch(`${apiUrl}?search=${searchText}`);
+      const data = await response.json();
+      console.log("Search Jobs Response:", data);
+      setIsLoading(false);
+      setJobItems(data.jobItems);
+    };
 
-        fetchData();
+    fetchData();
 
 
-    }, [searchText]);
-    //better to use onCHange in the input to make the api call
+  }, [searchText]);
+  //better to use onCHange in the input to make the api call
 
-    return {jobItems, jobItemsSliced, isLoading } as const
+  return { jobItems, jobItemsSliced, isLoading } as const
 }
 
-export function useJobItem(activeId:number|null) {
+export function useJobItem(activeId: number | null) {
 
-    const [jobItem, setJobItem] = useState<TJobDetails|null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const [jobItem, setJobItem] = useState<TJobDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
 
-      setIsLoading(true)
-    if (!activeId) return;
+    setIsLoading(true)
+
+    if (!activeId) {
+      setIsLoading(false);
+      return;
+    }
 
     const fetchJob = async () => {
       console.log(activeId);
@@ -47,20 +51,20 @@ export function useJobItem(activeId:number|null) {
       const jobDetails = data.jobItem
       setIsLoading(false);
       setJobItem(jobDetails)
-
+      
     };
 
 
     fetchJob();
-    
-    console.log("state ",jobItem)
+
+    console.log("state ", jobItem)
   }, [activeId]);
 
-  return {isLoading,jobItem} as const
+  return { isLoading, jobItem } as const
 }
 
-export function useActiveId(){
-    const [activeId, setActiveId] = useState<number | null>(null);
+export function useActiveId() {
+  const [activeId, setActiveId] = useState<number | null>(null);
 
   //read the id from the url
   useEffect(() => {

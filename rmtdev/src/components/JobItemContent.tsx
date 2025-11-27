@@ -8,7 +8,8 @@ export default function JobItemContent() {
   const { isLoading,jobItem }: { isLoading: boolean; jobItem: TJobDetails | null } = useJobItem(activeId);
 
   if (isLoading) {
-    <LoadingJobContent />;
+    console.log(isLoading)
+    return <LoadingJobContent />;
   }
 
   if (!jobItem) {
