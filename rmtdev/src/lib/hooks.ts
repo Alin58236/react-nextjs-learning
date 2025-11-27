@@ -85,3 +85,17 @@ export function useActiveId() {
 
   return activeId;
 }
+
+
+export function useDebounce(searchText :string ) {
+    const [debouncedText, setDebouncedText] = useState("");
+    useEffect(() => {
+      const timerId = setTimeout(() => {
+        setDebouncedText(searchText);
+      }, 500);
+  
+      return () => clearTimeout(timerId) //clear timeout 
+    }, [searchText]);
+
+    return debouncedText
+}
