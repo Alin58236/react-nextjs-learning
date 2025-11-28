@@ -1,6 +1,6 @@
 
 
-const ErrorMessage = ({message}) => {
+const ErrorMessage = ({message}:{message:String}) => {
   return (
     <div>{message}</div>
   )
