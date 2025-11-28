@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import Background from "./Background";
 import Container from "./Container";
