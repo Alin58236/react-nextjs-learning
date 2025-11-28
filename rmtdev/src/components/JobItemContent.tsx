@@ -5,10 +5,13 @@ import Spinner from "./Spinner";
 
 export default function JobItemContent() {
   const activeId = useActiveId();
-  const { isLoading,jobItem }: { isLoading: boolean; jobItem: TJobDetails | null } = useJobItem(activeId);
+  const {
+    isLoading,
+    jobItem,
+  } = useJobItem(activeId);
 
   if (isLoading) {
-    console.log(isLoading)
+    console.log(isLoading);
     return <LoadingJobContent />;
   }
 

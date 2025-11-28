@@ -40,62 +40,75 @@ hook with react-query*/}
 
 //the actual fetch function to be passed to reactquery
 //!!! We need to type the return type of the fetcher function!!!
-const actualFetch = async (activeId:number | null) : Promise<{public: boolean, jobItem:TJobDetails}> => {
-      //here we need to actually fetch the data. React-Query is only managing caching and retry
-      const response = await fetch(`https://bytegrad.com/course-assets/projects/rmtdev/api/data/${activeId}`);
-      const data = await response.json();
-      return data
+const actualFetchOneItem = async (activeId: number | null): Promise<{ public: boolean, jobItem: TJobDetails }> => {
+  //here we need to actually fetch the data. React-Query is only managing caching and retry
+  const response = await fetch(`https://bytegrad.com/course-assets/projects/rmtdev/api/data/${activeId}`);
+
+  //4xx or 5xx
+  if (!response.ok) {
+
+    const errorDetails = await response.json();
+
+    throw new Error(errorDetails.description)
+
+  }
+
+  const data = await response.json();
+  return data
 }
 
 export function useJobItem(activeId: number | null) {
 
-  const {data, isInitialLoading } = useQuery(
+  const { data, isInitialLoading } = useQuery(
     //query key
-    ['job-item', activeId], 
+    ['job-item', activeId],
     //actual fetch
-    () => (activeId ? actualFetch(activeId) : null),
+    () => (activeId ? actualFetchOneItem(activeId) : null),
     //cache and error behaviour
     {
-      staleTime: 1000*60*60, //an hour
+      staleTime: 1000 * 60 * 60, //an hour
       refetchOnWindowFocus: false,
       enabled: !!activeId, //if id is present -> true else false. Could've use Boolean(activeId)
       onError: (e) => {
-        console.error("ReactQuery Error -",e)
+        console.log(e)
       }
     }
   )
   const jobItem = data?.jobItem;
   const isLoading = isInitialLoading;
-  return { jobItem, isLoading  } as const
+  return { jobItem, isLoading } as const
+}
+
+
+const actualFetchAllItems = async (searchText: string): Promise<{ public: boolean, sorted: boolean, jobItems: TJobItem[] }> => {
+
+  const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
+  const response = await fetch(`${apiUrl}?search=${searchText}`);
+  const data = await response.json();
+  return data
+
 }
 
 export function useJobItems(searchText: string) {
-  const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
-  const [jobItems, setJobItems] = useState<TJobItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const jobItemsSliced = jobItems.slice(0, 7);
-
-  //not really recommended to use useEffect for this case
-  useEffect(() => {
-    setIsLoading(true);
-    if (searchText === "") return;
-
-    const fetchData = async () => {
-      const response = await fetch(`${apiUrl}?search=${searchText}`);
-      const data = await response.json();
-      console.log("Search Jobs Response:", data);
-      setIsLoading(false);
-      setJobItems(data.jobItems);
-    };
-
-    fetchData();
+  const { data, isInitialLoading } = useQuery(
+    //query key
+    ['job-items', searchText],
+    //actual fetch
+    () => (searchText ? actualFetchAllItems(searchText) : null),
+    //cache and error behaviour
+    {
+      staleTime: 1000 * 60 * 60, //an hour
+      refetchOnWindowFocus: false,
+      enabled: !!searchText, //if id is present -> true else false. Could've use Boolean(activeId)
+      onError: (e) => {
+        console.log(e)
+      }
+    }
+  )
 
 
-  }, [searchText]);
-  //better to use onCHange in the input to make the api call
+  return { jobItems: data?.jobItems, isLoading: isInitialLoading } as const
 
-  return { jobItems, jobItemsSliced, isLoading } as const
 }
 
 export function useActiveId() {

@@ -18,10 +18,9 @@ import SortingControls from "./SortingControls";
 function App() {
   const [searchText, setSearchText] = useState("");
   const debounceText = useDebounce(searchText)
-  const { jobItems, jobItemsSliced, isLoading } = useJobItems(debounceText);
-  const resultsCount = jobItems.length;
-
-
+  const { jobItems, isLoading } = useJobItems(debounceText);
+  const resultsCount = jobItems?.length || 0;
+  const jobItemsSliced = jobItems?.slice(0,7) || []
  
 
   return (
