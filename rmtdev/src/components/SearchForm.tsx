@@ -1,7 +1,9 @@
 export default function SearchForm({
+  setCurrentPage,
   searchText,
   setSearchText,
 }: {
+  setCurrentPage: (number:number) =>void;
   searchText: string;
   setSearchText: (text: string) => void;
 }) {
@@ -27,6 +29,7 @@ export default function SearchForm({
         onChange={(e) => {
           const validated = validateText(e.target.value);
           setSearchText(validated);
+          setCurrentPage(1);
         }}
         value={searchText}
         spellCheck="false"

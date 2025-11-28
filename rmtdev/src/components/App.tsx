@@ -17,12 +17,34 @@ import SortingControls from "./SortingControls";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+
+  //state
   const [searchText, setSearchText] = useState("");
   const debounceText = useDebounce(searchText)
   const { jobItems, isLoading } = useJobItems(debounceText);
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  
+  //derived state
   const resultsCount = jobItems?.length || 0;
-  const jobItemsSliced = jobItems?.slice(0,7) || []
+   
+
+  const jobItemsSliced = jobItems?.slice((currentPage-1)*7,currentPage*7) || []
  
+  //handlers
+  const handleChangePage = (direction: "next" | "previous") => {
+
+    if(direction ==="next"){
+      setCurrentPage((prev) => prev+1)
+    } else if (direction==="previous"){
+      if(currentPage<=1){
+        setCurrentPage(1)
+      }
+      else
+      setCurrentPage((prev) => prev-1)
+    }
+    console.log("changed to "+currentPage)
+  }
 
   return (
     <>
@@ -33,7 +55,7 @@ function App() {
           <BookmarksButton />
         </HeaderTop>
 
-        <SearchForm setSearchText={setSearchText} searchText={searchText} />
+        <SearchForm setCurrentPage={setCurrentPage} setSearchText={setSearchText} searchText={searchText} />
       </Header>
       <Container>
         <Sidebar>
@@ -44,7 +66,7 @@ function App() {
 
           <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
 
-          <PaginationControls />
+          <PaginationControls resultsCount={resultsCount} currentPage={currentPage} onClick={handleChangePage}/>
         </Sidebar>
 
         <JobItemContent />
