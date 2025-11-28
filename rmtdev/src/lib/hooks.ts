@@ -49,7 +49,7 @@ const actualFetch = async (activeId:number | null) : Promise<{public: boolean, j
 
 export function useJobItem(activeId: number | null) {
 
-  const {data, isLoading } = useQuery(
+  const {data, isInitialLoading } = useQuery(
     //query key
     ['job-item', activeId], 
     //actual fetch
@@ -65,6 +65,7 @@ export function useJobItem(activeId: number | null) {
     }
   )
   const jobItem = data?.jobItem;
+  const isLoading = isInitialLoading;
   return { jobItem, isLoading  } as const
 }
 
