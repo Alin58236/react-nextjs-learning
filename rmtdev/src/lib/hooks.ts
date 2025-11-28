@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { TJobDetails, TJobItem } from "../types/types";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 
 //funtion with standard fetchAPI ()
@@ -68,6 +69,7 @@ export function useJobItem(activeId: number | null) {
     {
       staleTime: 1000 * 60 * 60, //an hour
       refetchOnWindowFocus: false,
+      retry: false,
       enabled: !!activeId, //if id is present -> true else false. Could've use Boolean(activeId)
       onError: (e) => {
         console.log(e)
@@ -84,9 +86,15 @@ const actualFetchAllItems = async (searchText: string): Promise<{ public: boolea
 
   const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
   const response = await fetch(`${apiUrl}?search=${searchText}`);
+  
+  //4xx or 5xx
+  if (!response.ok) {
+    const errorDetails = await response.json();
+    throw new Error(errorDetails.description)
+  }
+  
   const data = await response.json();
-  return data
-
+  return data;
 }
 
 export function useJobItems(searchText: string) {
@@ -99,9 +107,20 @@ export function useJobItems(searchText: string) {
     {
       staleTime: 1000 * 60 * 60, //an hour
       refetchOnWindowFocus: false,
+      retry: false,
       enabled: !!searchText, //if id is present -> true else false. Could've use Boolean(activeId)
-      onError: (e) => {
-        console.log(e)
+      onError: (e:unknown) => {
+
+        let message;
+        if(e instanceof Error){
+          message = e.message;
+        } else if (typeof e === "string"){
+          message = e;
+        } else {
+          message = "An error occurred";
+        }
+
+        toast.error(message);
       }
     }
   )

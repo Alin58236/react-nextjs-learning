@@ -8,8 +8,7 @@ export default function SearchForm({
   const validateText = (text: string) => {
     // Example validation: limit to 
     const maxLength = 30;
-    const sanitizedText = text.replace(/[^a-zA-Z0-9\s]/g, "");
-    return sanitizedText.slice(0, maxLength);
+    return text.slice(0, maxLength);
   };
 
   return (
