@@ -24,3 +24,7 @@ export type TJobDetails = TJobItem & {
     companyURL: string
 }
 
+export type TSortBy = "relevance" | "recent"
+
+export type TPageDirection = "next" | "previous"
+

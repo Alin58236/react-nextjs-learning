@@ -1,4 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
+import { TPageDirection } from "../types/types";
 
 export default function PaginationControls({
   resultsCount,
@@ -6,7 +7,7 @@ export default function PaginationControls({
   currentPage,
 }: {
   resultsCount: number;
-  onClick: (direction: "next" | "previous") => void;
+  onClick: (direction: TPageDirection) => void;
   currentPage: number;
 }) {
   const totalPages =
@@ -38,7 +39,7 @@ export function PaginationButton({
   currentPage,
   onClick,
 }: {
-  direction: "next" | "previous";
+  direction: TPageDirection;
   currentPage: number;
   onClick: () => void;
 }) {
