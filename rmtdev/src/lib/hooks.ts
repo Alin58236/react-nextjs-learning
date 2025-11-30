@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TJobDetails, TJobItem } from "../types/types";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
 
 //funtion with standard fetchAPI ()
@@ -86,13 +87,13 @@ const actualFetchAllItems = async (searchText: string): Promise<{ public: boolea
 
   const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
   const response = await fetch(`${apiUrl}?search=${searchText}`);
-  
+
   //4xx or 5xx
   if (!response.ok) {
     const errorDetails = await response.json();
     throw new Error(errorDetails.description)
   }
-  
+
   const data = await response.json();
   return data;
 }
@@ -109,12 +110,12 @@ export function useJobItems(searchText: string) {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: !!searchText, //if id is present -> true else false. Could've use Boolean(activeId)
-      onError: (e:unknown) => {
+      onError: (e: unknown) => {
 
         let message;
-        if(e instanceof Error){
+        if (e instanceof Error) {
           message = e.message;
-        } else if (typeof e === "string"){
+        } else if (typeof e === "string") {
           message = e;
         } else {
           message = "An error occurred";
@@ -165,4 +166,32 @@ export function useDebounce(searchText: string) {
   }, [searchText]);
 
   return debouncedText
+}
+
+export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+
+  //get from localStorage
+  const [value, setValue] = useState(JSON.parse(
+    localStorage.getItem(key) || JSON.stringify(initialValue)
+  ));
+
+  //save to localstorage
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [value, key]);
+
+  return [value, setValue] as const
+
+}
+
+export function useBookmarksContext() {
+  const context = useContext(BookmarksContext);
+
+  if (!context) {
+    throw new Error(
+      "useBookmarksContext must be used within a BookamrksContextProvider!"
+    );
+  }
+
+  return context;
 }

@@ -28,3 +28,7 @@ export type TSortBy = "relevance" | "recent"
 
 export type TPageDirection = "next" | "previous"
 
+export type TBookmarksContext = {
+    bookmarkedIds: number[];
+    handleToggleBookmark: (id:number) => void;
+}
