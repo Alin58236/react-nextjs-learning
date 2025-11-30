@@ -4,11 +4,10 @@ export const BookmarksContext = createContext(null);
 
 const BookmarksContextProvider = ({ children }) => {
 
-  const localStorageIds: number[] = JSON.parse(
+  //get ids from local storage only on first render
+  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>(JSON.parse(
     localStorage.getItem("bookmarkedIds") || "[]"
-  );
-
-  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>(localStorageIds);
+  ));
 
   const handleToggleBookmark = (id: number) => {
     console.log("checking for: ", id )
