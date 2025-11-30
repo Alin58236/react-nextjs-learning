@@ -28,7 +28,8 @@ function App() {
   //derived state
   const resultsCount = jobItems?.length || 0;
 
-  const jobItemsSorted = jobItems?.sort((a, b) => {
+  //prevent mutating the original jobItems Array
+  const jobItemsSorted = [...(jobItems) || []].sort((a, b) => {
     if (sortBy === "relevance") {
       return b.relevanceScore - a.relevanceScore;
     }
