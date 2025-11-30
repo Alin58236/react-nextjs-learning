@@ -24,7 +24,7 @@ function App() {
   const { jobItems, isLoading } = useJobItems(debounceText);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<TSortBy>("relevance");
-  console.log(sortBy);
+
   //derived state
   const resultsCount = jobItems?.length || 0;
 

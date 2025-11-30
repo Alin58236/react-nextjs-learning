@@ -1,15 +1,13 @@
 import { TJobItem } from "../types/types";
 import BookmarkIcon from "./BookmarkIcon";
 
-export default function JobListItem({jobItem, isActive}: {jobItem: TJobItem, isActive:boolean}) {
+export default function JobListItem({ jobItem, isActive}: {jobItem: TJobItem, isActive:boolean}) {
   return (
     <li key={jobItem.id} className={`job-item ${isActive ? 'job-item--active':''}`}>
 
       {/* {the browser will actually refresh when clicking on the <a>
         To prevent refreshing we can add a hashtag in front of the id
       } */}
-
-
 
       <a href={`#${jobItem.id.toString()}`} className="job-item__link">
         <div className="job-item__badge">{jobItem.badgeLetters}</div>
@@ -20,7 +18,7 @@ export default function JobListItem({jobItem, isActive}: {jobItem: TJobItem, isA
         </div>
 
         <div className="job-item__right">
-          <BookmarkIcon />
+          <BookmarkIcon id={jobItem.id}/>
           <time className="job-item__time">{jobItem.daysAgo}d</time>
         </div>
       </a>
