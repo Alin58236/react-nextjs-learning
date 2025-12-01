@@ -231,14 +231,14 @@ export function useJobItems(ids: number[]) {
 }
 
 
-export function useOnClickOutside(refs, handler) {
+export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void) {
     useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       //daca nu ma dat click pe buton, sa nu ruleze asta
       // am refactorizat in customHook
       if (
         e.target instanceof HTMLElement &&
-        refs.every((ref)=> !ref.current?.contains(e.target))
+        refs.every((ref)=> !ref.current?.contains(e.target as Node)) //cast to make issue dissappear (no way around it)
       ) {
         
         handler();
