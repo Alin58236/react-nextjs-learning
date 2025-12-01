@@ -2,6 +2,8 @@ import { createContext } from "react";
 import { useJobItems, useLocalStorage } from "../lib/hooks";
 import { TBookmarksContext } from "../types/types";
 
+
+
 export const BookmarksContext = createContext<TBookmarksContext | null>(null);
 
 const BookmarksContextProvider = ({
