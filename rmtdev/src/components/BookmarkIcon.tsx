@@ -6,7 +6,6 @@ export default function BookmarkIcon({ id }: { id: number }) {
   
   const { bookmarkedIds, handleToggleBookmark } = useBookmarksContext();
 
-  console.log(bookmarkedIds);
   return (
     <button
       onClick={(e) => {

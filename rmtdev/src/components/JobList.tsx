@@ -14,16 +14,18 @@ export function JobList({
 
   return (
     <ul className="job-list">
-      {isLoading ?? <Spinner />}
-
-      {!isLoading && 
-        jobItems.map((jobItem) => (
+      {isLoading ? <Spinner />:
+      
+      jobItems.map((jobItem) => (
           <JobListItem
             key={jobItem.id}
             jobItem={jobItem}
             isActive={jobItem.id === activeId}
           />
-        ))}
+        ))
+      
+      }
+
     </ul>
   );
 }

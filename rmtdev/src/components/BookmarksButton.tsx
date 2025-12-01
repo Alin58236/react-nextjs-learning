@@ -1,23 +1,40 @@
 import { TriangleDownIcon } from "@radix-ui/react-icons";
 import BookmarksPopover from "./BookmarksPopover";
-import { useState } from "react";
-import { useBookmarksContext } from "../lib/hooks";
+import { useEffect, useState } from "react";
 
 export default function BookmarksButton() {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [isOpen,setIsOpen] = useState(false);
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      //daca nu ma dat click pe buton, sa nu ruleze asta
+      //mare workaround ce am putut face aici...
+      if (
+        e.target instanceof HTMLElement &&
+        !e.target.closest(".bookmarks-btn") &&
+        !e.target.closest(".bookmarks-popover")
+      ) {
+        setIsOpen(false);
+      }
+    };
 
-  const {bookmarkedJobItems, isLoading} = useBookmarksContext();
+    document.addEventListener("click", handleClick);
 
-  console.log(isOpen)
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+
   return (
     <section>
-      <button onClick={() => setIsOpen((prev) => !prev)} className="bookmarks-btn">
+      <button
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="bookmarks-btn"
+      >
         Bookmarks <TriangleDownIcon />
       </button>
 
-      {isOpen&&<BookmarksPopover/>}
-      
+      {isOpen && <BookmarksPopover />}
     </section>
   );
 }
