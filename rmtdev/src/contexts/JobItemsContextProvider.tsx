@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { TJobItemsContext, TPageDirection, TSortBy } from "../types/types";
 import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
 
@@ -29,18 +29,24 @@ const JobItemsContextProvider = ({
         } else {
           return a.daysAgo - b.daysAgo;
         }
-      }), [sortBy, jobItems]
+      }),
+    [sortBy, jobItems]
   );
 
-  const jobItemsSliced =
-    jobItemsSorted?.slice((currentPage - 1) * 7, currentPage * 7) || [];
+  const jobItemsSliced = useMemo(
+    () => jobItemsSorted?.slice((currentPage - 1) * 7, currentPage * 7) || [],
 
-  const handleSortBy = (newSortBy: TSortBy) => {
+    [jobItemsSorted, currentPage]
+  );
+
+  //useCallback is basically useMemo but for functions!!!
+
+  const handleSortBy = useCallback((newSortBy: TSortBy) => {
     setSortBy(newSortBy);
     setCurrentPage(1);
-  };
+  },[])
 
-  const handleChangePage = (direction: TPageDirection) => {
+  const handleChangePage = useCallback((direction: TPageDirection) => {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     } else if (direction === "previous") {
@@ -48,21 +54,33 @@ const JobItemsContextProvider = ({
         setCurrentPage(1);
       } else setCurrentPage((prev) => prev - 1);
     }
-  };
+  },[currentPage])
+
+  //this way the context doesnt create objects at every change of state in the context
+  const contextValue = useMemo(
+    () => ({
+      jobItems,
+      jobItemsSliced,
+      isLoading,
+      resultsCount,
+      currentPage,
+      sortBy,
+      handleChangePage,
+      handleSortBy,
+    }),
+    //whenever any of these change, only then recreate the whole object
+    [jobItems,
+      jobItemsSliced,
+      isLoading,
+      resultsCount,
+      currentPage,
+      sortBy,
+      handleChangePage,
+      handleSortBy,]
+  );
 
   return (
-    <JobItemsContext.Provider
-      value={{
-        jobItems,
-        jobItemsSliced,
-        isLoading,
-        resultsCount,
-        currentPage,
-        sortBy,
-        handleChangePage,
-        handleSortBy,
-      }}
-    >
+    <JobItemsContext.Provider value={contextValue}>
       {children}
     </JobItemsContext.Provider>
   );
