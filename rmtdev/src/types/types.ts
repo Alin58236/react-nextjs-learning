@@ -36,5 +36,22 @@ export type TBookmarksContext = {
 }
 
 export type TActiveIdContext = {
-    activeId : number | null
+    activeId: number | null
+}
+
+export type TSearchTextContext = {
+    searchText: string,
+    debounceText: string,
+    handleChangeSearchText: (newSearchText: string) => void
+}
+
+export type TJobItemsContext = {
+    jobItems: TJobItem[] | undefined,
+    jobItemsSliced:  TJobItem[],
+    isLoading: boolean,
+    resultsCount: number,
+    currentPage: number,
+    sortBy: TSortBy,
+    handleChangePage: (direction: TPageDirection) => void;
+    handleSortBy: (newSortBy: TSortBy) => void; 
 }

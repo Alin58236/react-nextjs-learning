@@ -3,13 +3,16 @@ import { TJobItem } from "../types/types";
 import JobListItem from "./JobListItem";
 import Spinner from "./Spinner";
 
-export function JobList({
-  jobItems,
-  isLoading,
-}: {
-  jobItems: TJobItem[];
-  isLoading: boolean;
-}) {
+type TJobListProps = {
+  jobItems: TJobItem[],
+  isLoading: boolean
+}
+
+//dumb component on purpose, so we dont mix the 
+//actual sliced items with the bookmarked items
+export function JobList({jobItems, isLoading}:TJobListProps) {
+
+
   const {activeId} = useActiveIdContext();
 
   return (
@@ -17,7 +20,7 @@ export function JobList({
       {isLoading ? <Spinner />:
       
       jobItems.map((jobItem) => (
-          <JobListItem
+          <JobListItem 
             key={jobItem.id}
             jobItem={jobItem}
             isActive={jobItem.id === activeId}
