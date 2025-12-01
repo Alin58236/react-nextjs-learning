@@ -229,3 +229,28 @@ export function useJobItems(ids: number[]) {
 
 
 }
+
+
+export function useOnClickOutside(refs, handler) {
+    useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      //daca nu ma dat click pe buton, sa nu ruleze asta
+      // am refactorizat in customHook
+      if (
+        e.target instanceof HTMLElement &&
+        refs.every((ref)=> !ref.current?.contains(e.target))
+      ) {
+        
+        handler();
+
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [refs, handler]);
+
+}
