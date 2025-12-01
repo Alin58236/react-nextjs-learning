@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { TJobItemsContext, TPageDirection, TSortBy } from "../types/types";
 import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
 
@@ -9,8 +9,7 @@ const JobItemsContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-
-  //dependency on the searchTextContext  
+  //dependency on the searchTextContext
   const { debounceText } = useSearchTextContext();
 
   //state
@@ -22,12 +21,16 @@ const JobItemsContextProvider = ({
   const resultsCount = jobItems?.length || 0;
 
   //prevent mutating the original jobItems Array
-  const jobItemsSorted = [...(jobItems || [])].sort((a, b) => {
-    if (sortBy === "relevance") {
-      return b.relevanceScore - a.relevanceScore;
-    }
-    return a.daysAgo - b.daysAgo;
-  });
+  const jobItemsSorted = useMemo(
+    () =>
+      [...(jobItems || [])].sort((a, b) => {
+        if (sortBy === "relevance") {
+          return b.relevanceScore - a.relevanceScore;
+        } else {
+          return a.daysAgo - b.daysAgo;
+        }
+      }), [sortBy, jobItems]
+  );
 
   const jobItemsSliced =
     jobItemsSorted?.slice((currentPage - 1) * 7, currentPage * 7) || [];
