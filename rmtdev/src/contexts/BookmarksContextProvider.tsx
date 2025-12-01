@@ -16,7 +16,8 @@ const BookmarksContextProvider = ({
     []
   );
 
-  const {jobItems: bookmarkedJobItems, isLoading} = useJobItems(bookmarkedIds)
+  const { jobItems: bookmarkedJobItems, isLoading } =
+    useJobItems(bookmarkedIds);
 
   const handleToggleBookmark = (id: number) => {
     if (bookmarkedIds.includes(id)) {

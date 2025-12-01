@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDebounce, useJobItems } from "../lib/hooks";
+import { useDebounce, useSearchQuery } from "../lib/hooks";
 import Background from "./Background";
 import Container from "./Container";
 import Footer from "./Footer";
@@ -21,7 +21,7 @@ function App() {
   //state
   const [searchText, setSearchText] = useState("");
   const debounceText = useDebounce(searchText);
-  const { jobItems, isLoading } = useJobItems(debounceText);
+  const { jobItems, isLoading } = useSearchQuery(debounceText);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<TSortBy>("relevance");
 
@@ -53,7 +53,7 @@ function App() {
         setCurrentPage(1);
       } else setCurrentPage((prev) => prev - 1);
     }
-    console.log("changed to " + currentPage);
+  
   };
 
   return (

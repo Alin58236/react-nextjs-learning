@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { TJobDetails, TJobItem } from "../types/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
@@ -98,7 +98,7 @@ const actualFetchAllItems = async (searchText: string): Promise<{ public: boolea
   return data;
 }
 
-export function useJobItems(searchText: string) {
+export function useSearchQuery(searchText: string) {
   const { data, isInitialLoading } = useQuery(
     //query key
     ['job-items', searchText],
@@ -194,4 +194,38 @@ export function useBookmarksContext() {
   }
 
   return context;
+}
+
+//used to betch by multiple ids
+export function useJobItems(ids: number[]) {
+
+  //used from react Query to query for multiple strings (eg. our use case with multiple ids)
+  const results = useQueries({
+
+    queries: ids.map(id => ({
+      queryKey: ['job-item', id],
+      //uses the already existing fetch method
+      queryFn: () => actualFetchOneItem(id),
+      staleTime: 1000 * 60 * 60, //an hour
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: Boolean(id), //if id is present -> true else false. Could've use Boolean(activeId)
+      onError: (e: undefined) => {
+        console.log(e)
+      }
+    })),
+
+
+  });
+
+
+
+  const jobItems = results.map(result => result.data?.jobItem).filter(jobItem => jobItem !== undefined);
+
+  //if at least one has isLoading true, then isLoading is true
+  const isLoading = results.some(result => result.isLoading)
+
+  return {jobItems,isLoading}
+
+
 }
