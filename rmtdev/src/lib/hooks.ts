@@ -3,6 +3,7 @@ import { TJobDetails, TJobItem } from "../types/types";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
+import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 
 
 //funtion with standard fetchAPI ()
@@ -82,7 +83,6 @@ export function useJobItem(activeId: number | null) {
   return { jobItem, isLoading } as const
 }
 
-
 const actualFetchAllItems = async (searchText: string): Promise<{ public: boolean, sorted: boolean, jobItems: TJobItem[] }> => {
 
   const apiUrl = "https://bytegrad.com/course-assets/projects/rmtdev/api/data";
@@ -153,7 +153,6 @@ export function useActiveId() {
 
   return activeId;
 }
-
 
 export function useDebounce(searchText: string) {
   const [debouncedText, setDebouncedText] = useState("");
@@ -230,7 +229,6 @@ export function useJobItems(ids: number[]) {
 
 }
 
-
 export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void) {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -253,4 +251,17 @@ export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler:
     };
   }, [refs, handler]);
 
+}
+
+
+export function useActiveIdContext() {
+  const context = useContext(ActiveIdContext);
+
+  if (!context) {
+    throw new Error(
+      "useActiveIdContext must be used within a ActiveIdContextProvider!"
+    );
+  }
+
+  return context;
 }

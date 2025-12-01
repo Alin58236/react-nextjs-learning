@@ -34,3 +34,7 @@ export type TBookmarksContext = {
     bookmarkedJobItems: TJobDetails[],
     isLoading: boolean
 }
+
+export type TActiveIdContext = {
+    activeId : number | null
+}
