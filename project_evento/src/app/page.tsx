@@ -12,6 +12,7 @@ export default function Home() {
         <input className="w-full h-16 rounded-lg bg-white/[7%] px-6 outline-none ring-accent/50 focus:ring-2 focus:bg-white/[10%] transition"
           placeholder= "Search events in any city..."
           spellCheck={false}
+          suppressHydrationWarning 
         />
       </form>
 
