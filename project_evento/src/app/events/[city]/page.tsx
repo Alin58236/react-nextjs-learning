@@ -1,4 +1,6 @@
-import H1 from "@/components/H1";
+
+import { EventsList } from "@/components/eventsList";
+import H1 from "@/components/h1";
 import { EventsPageProps, EventType } from "@/lib/types";
 
 
@@ -21,14 +23,9 @@ const EventsPage = async ({ params }: EventsPageProps) => {
     <main className="flex flex-col items-center py-24 px-[20px] min-h-[110vh]">
       <H1>{city === "All" ? "All Events" : `Events in ${city}`}</H1>
 
-      {events.map((event) => (
-        <section
-          key={event.id}
-          
-        >
-          {event.name}
-        </section>
-      ))}
+
+    <EventsList events={events} />
+      
     </main>
   );
 };

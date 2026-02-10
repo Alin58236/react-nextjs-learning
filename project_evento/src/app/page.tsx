@@ -1,5 +1,6 @@
+import EventForm from "@/components/eventForm";
 import Link from "next/link";
-import EventForm from "../components/EventForm";
+
 
 export default function Home() {
 

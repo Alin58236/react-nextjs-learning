@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import React from "react";
-import Logo from "./Logo";
+
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import Logo from "./logo";
 
 const routes = [
   { name: "Home", path: "/" },
