@@ -1,8 +1,6 @@
-
 import { EventsList } from "@/components/eventsList";
 import H1 from "@/components/h1";
 import { EventsPageProps, EventType } from "@/lib/types";
-
 
 const EventsPage = async ({ params }: EventsPageProps) => {
   // we can access the city parameter from the URL using the params object passed to the page component. This allows us to dynamically render content based on the city specified in the URL. The way this is accessed is through the actual route given by the folder structure
@@ -15,17 +13,16 @@ const EventsPage = async ({ params }: EventsPageProps) => {
     `https://bytegrad.com/course-assets/projects/evento/api/events?city=austin`,
   );
 
-  const events : EventType[] = await response.json();
+  const events: EventType[] = await response.json();
 
   console.log(events);
 
   return (
     <main className="flex flex-col items-center py-24 px-[20px] min-h-[110vh]">
-      <H1>{city === "All" ? "All Events" : `Events in ${city}`}</H1>
 
+      <H1 className="mb-28">{city === "All" ? "All Events" : `Events in ${city}`}</H1>
 
-    <EventsList events={events} />
-      
+      <EventsList events={events} />
     </main>
   );
 };
