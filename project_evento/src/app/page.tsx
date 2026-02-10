@@ -1,6 +1,20 @@
 import Link from "next/link";
+import EventForm from "../components/EventForm";
 
 export default function Home() {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const query = formData.get("search")?.toString().trim();
+
+    if (query) {
+      // Redirect to the search results page with the query as a URL parameter
+      window.location.href = `/events/search?query=${encodeURIComponent(query)}`;
+    }
+  }
+
+
   return (
     <main className="flex flex-col items-center px-3 pt-36">
       <h1 className="text-3xl lg:text-6xl font-bold tracking-tight">
@@ -8,13 +22,7 @@ export default function Home() {
       </h1>
       <p className="mb-12 mt-7 text-2xl lg:text-3xl opacity-75">Browse more than <span className="font-bold text-accent italic underline">10,000 events</span> around you</p>
 
-      <form className="w-full sm:w-[580px]">
-        <input className="w-full h-16 rounded-lg bg-white/[7%] px-6 outline-none ring-accent/50 focus:ring-2 focus:bg-white/[10%] transition"
-          placeholder= "Search events in any city..."
-          spellCheck={false}
-          suppressHydrationWarning 
-        />
-      </form>
+      <EventForm />
 
       <section className="mt-6 flex gap-x-4 text-sm text-white/[50%]">
         <p>Popular:</p>
