@@ -12,7 +12,7 @@ export const EventCard = ({ event }: { event: EventType }) => {
           alt={event.name}
           width={500}
           height={380}
-          className="object-fit h-[60%]"
+          className="object-cover h-[60%]"
         />
         <div className="flex flex-col flex-1 justify-center items-center">
           <h2 className="text-2xl font-semibold ">{event.name}</h2>

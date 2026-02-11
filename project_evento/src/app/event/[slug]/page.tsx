@@ -1,4 +1,5 @@
 import H1 from "@/components/h1";
+import EventSection from "@/components/eventSection";
 import { EventType } from "@/lib/types";
 import Image from "next/image";
 import React from "react";
@@ -18,7 +19,10 @@ const EventPage = async (params: PageProps) => {
 
   return (
     <main>
-      <section className=" flex  relative  justify-center items-center overflow-hidden -z-1 py-14 md:py-40">
+      <section
+        id="introSection"
+        className=" flex  relative  justify-center items-center overflow-hidden -z-1 py-14 md:py-40"
+      >
         <Image
           className="object-cover blur-3xl z-0"
           src={event.imageUrl}
@@ -59,6 +63,13 @@ const EventPage = async (params: PageProps) => {
           </div>
         </div>
       </section>
+
+      <div className="min-h-[75vh] text-center px-5 py-16">
+
+        <EventSection props={{ event, title: "About The Event", content: event.description }} />
+          
+       <EventSection props={{ event, title: "Location", content: event.location }} />
+      </div>
     </main>
   );
 };
