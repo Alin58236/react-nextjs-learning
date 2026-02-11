@@ -27,3 +27,7 @@
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.1) #0f1015;
 }
+
+.state-effect {
+    @apply hover:scale-105 active:scale-[1.02] transition
+}
