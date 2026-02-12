@@ -20,6 +20,7 @@ export const EventsList = async ({ city }: { city: string }) => {
       {events.map((event) => (
         <EventCard key={event.id} event={event} />
       ))}
-    </section>
+    </section> 
+    
   );
 };
