@@ -7,12 +7,17 @@ const EventsPage = async ({ params }: EventsPageProps) => {
   // eg. in this case it is events/city, so we can access the city parameter through params.city
 
   let paramList = await params;
+  
+  
   let city = await paramList.city.charAt(0).toUpperCase() + paramList.city.slice(1);
+  
+
 
   const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`,
+    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${paramList.city}`,
   );
 
+  console.log(response);
   const events: EventType[] = await response.json();
 
   console.log(events);
