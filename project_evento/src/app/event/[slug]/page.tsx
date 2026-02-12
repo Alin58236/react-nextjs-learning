@@ -3,6 +3,7 @@ import EventSection from "@/components/eventSection";
 import { EventType } from "@/lib/types";
 import Image from "next/image";
 import React from "react";
+import { sleep } from "@/lib/utils";
 
 type PageProps = {
   params: { slug: string };
@@ -11,6 +12,7 @@ type PageProps = {
 const EventPage = async (params: PageProps) => {
   const { slug } = await params.params;
 
+  sleep(1000); // Simulate network delay
   const response = await fetch(
     `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`,
   );
