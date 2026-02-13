@@ -1,6 +1,12 @@
-import { EventoEvent } from "@/generated/prisma/client";
+import { EventoEvent } from "@prisma/client";
+
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import prisma from "./db";
+
+
+
+
 
 //classValue is basically Instanceof and displays the class of the object -> letting me put strings or objects in inputs
 export function cn(...inputs: ClassValue[]) {
@@ -15,20 +21,31 @@ export function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+
 export async function getEventsByCity(city: string) {
-    const response = await fetch(
-        `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`,
-        { next: { revalidate: 300 } }
-    );
-    const events: EventoEvent[] = await response.json();
+
+    console.log("Getting events for city:", city);
+    const events: EventoEvent[] = await prisma.eventoEvent.findMany({
+        where: {
+            city: city === "All" ? undefined : capitalize(city),
+        },
+        orderBy: {
+            date: "asc",
+        },
+    });
+
     return events;
-} 
+}
 
 export async function getEventBySlug(slug: string) {
-    const response = await fetch(
-        `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`,
-        { next: { revalidate: 300 } }
-    );
-    const event: EventoEvent = await response.json();
+
+    const event = await prisma.eventoEvent.findUnique({
+        where: {
+            slug: slug,
+        },
+        
+    });
+
     return event;
 }
+
