@@ -1,12 +1,33 @@
+"use client";
 import { EventType } from "@/lib/types";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
+
+const MotionLink = motion(Link);
+
+
 
 export const EventCard = ({ event }: { event: EventType }) => {
+
+
+  const ref = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1", "1.5 1"],
+  });
+
+  const calculatedScale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const calculatedOpacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
+
   return (
-    <Link className="flex-1 basis-80 h-[380px] max-w-[500px]" href={`/event/${event.slug}`}>
-      <section className="relative flex flex-col flex-1 basis-80 h-full w-full bg-white-[3%] rounded-xl overflow-hidden hover:scale-105 active:scale-[1.02] transition">
+    <MotionLink ref={ref} className="flex-1 basis-80 h-[380px] max-w-[500px]" href={`/event/${event.slug}`} style={{
+      scale: calculatedScale,
+      opacity: calculatedOpacity,
+    }}>
+      <section className="relative flex flex-col flex-1 basis-80 h-full w-full bg-white/[3%] rounded-xl overflow-hidden hover:scale-105 active:scale-[1.02] transition">
         <Image
           src={event.imageUrl}
           alt={event.name}
@@ -31,6 +52,6 @@ export const EventCard = ({ event }: { event: EventType }) => {
           </p>
         </section>
       </section>
-    </Link>
+    </MotionLink>
   );
 };
