@@ -3,15 +3,3 @@ export type EventsPageProps = {
     city: string;
   };
 };
-
-export type EventType = {
-  id: number;
-  name: string;
-  slug: string;
-  city: string;
-  location: string;
-  date: string;
-  organizerName: string;
-  imageUrl: string;
-  description: string;
-};

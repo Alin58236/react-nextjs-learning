@@ -1,7 +1,8 @@
-import { EventType } from '@/lib/types'
+import { EventoEvent } from "@/generated/prisma/client";
 
 
-export default function eventSection({props}: {props : {event: EventType, title: string, content: string}}) {
+
+export default function eventSection({props}: {props : {event: EventoEvent, title: string, content: string}}) {
   const { event, title, content } = props;
   return (
     <section

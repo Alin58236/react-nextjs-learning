@@ -1,3 +1,4 @@
+import { EventoEvent } from "@/generated/prisma/client";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -19,7 +20,7 @@ export async function getEventsByCity(city: string) {
         `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`,
         { next: { revalidate: 300 } }
     );
-    const events = await response.json();
+    const events: EventoEvent[] = await response.json();
     return events;
 } 
 
@@ -28,6 +29,6 @@ export async function getEventBySlug(slug: string) {
         `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`,
         { next: { revalidate: 300 } }
     );
-    const event = await response.json();
+    const event: EventoEvent = await response.json();
     return event;
 }

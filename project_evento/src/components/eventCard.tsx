@@ -1,5 +1,6 @@
 "use client";
-import { EventType } from "@/lib/types";
+
+import { EventoEvent } from "@/generated/prisma/client";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import React, { useRef } from "react";
 
 const MotionLink = motion(Link);
 
-export const EventCard = ({ event }: { event: EventType }) => {
+export const EventCard = ({ event }: { event: EventoEvent }) => {
   const ref = useRef(null);
 
   const { scrollYProgress } = useScroll({

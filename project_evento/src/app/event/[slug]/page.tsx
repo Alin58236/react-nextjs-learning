@@ -1,11 +1,12 @@
 import H1 from "@/components/h1";
 import EventSection from "@/components/eventSection";
-import { EventType } from "@/lib/types";
+
 import Image from "next/image";
 import React from "react";
 import { getEventBySlug, sleep } from "@/lib/utils";
 import { Metadata } from "next";
 import { get } from "http";
+import { EventoEvent } from "@/generated/prisma/client";
 
 type PageProps = {
   params: { slug: string };
@@ -15,7 +16,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const event: EventType = await getEventBySlug(slug);
+  const event: EventoEvent = await getEventBySlug(slug);
   return {
     title: `Evento - ${event.name}`,
     description: "Discover and attend over 10,000 events worldwide!",
@@ -25,7 +26,7 @@ export async function generateMetadata({
 const EventPage = async (params: PageProps) => {
   const { slug } = await params.params;
   
-  const event: EventType = await getEventBySlug(slug); // this function most probably wont execute at render because it already executed once at getMetadata and the data is cached, so it will just return the cached data instead of making a new request, but if it does execute, it will fetch the event data based on the slug and return it as an object of type EventType.
+  const event: EventoEvent = await getEventBySlug(slug); // this function most probably wont execute at render because it already executed once at getMetadata and the data is cached, so it will just return the cached data instead of making a new request, but if it does execute, it will fetch the event data based on the slug and return it as an object of type EventoEvent.
   console.log(event);
 
   return (

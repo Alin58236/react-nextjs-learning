@@ -1,15 +1,16 @@
-import { EventType } from "@/lib/types";
+
 import React from "react";
 import { EventCard } from "./eventCard";
 import next from "next";
 import { getEventsByCity } from "@/lib/utils";
+import { EventoEvent } from "@/generated/prisma/browser";
 
 export const EventsList = async ({ city }: { city: string }) => {
   const slug = city.toLowerCase();
 
   console.log("Fetching events for city: " + slug);
 
-  const events: EventType[] = await getEventsByCity(slug);
+  const events: EventoEvent[] = await getEventsByCity(slug);
 
   console.log(events);
   
