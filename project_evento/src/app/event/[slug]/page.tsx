@@ -3,20 +3,29 @@ import EventSection from "@/components/eventSection";
 import { EventType } from "@/lib/types";
 import Image from "next/image";
 import React from "react";
-import { sleep } from "@/lib/utils";
+import { getEventBySlug, sleep } from "@/lib/utils";
+import { Metadata } from "next";
+import { get } from "http";
 
 type PageProps = {
   params: { slug: string };
 };
 
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const event: EventType = await getEventBySlug(slug);
+  return {
+    title: `Evento - ${event.name}`,
+    description: "Discover and attend over 10,000 events worldwide!",
+  };
+}
+
 const EventPage = async (params: PageProps) => {
   const { slug } = await params.params;
-
-  sleep(1000); // Simulate network delay
-  const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`,
-  );
-  const event: EventType = await response.json();
+  
+  const event: EventType = await getEventBySlug(slug); // this function most probably wont execute at render because it already executed once at getMetadata and the data is cached, so it will just return the cached data instead of making a new request, but if it does execute, it will fetch the event data based on the slug and return it as an object of type EventType.
   console.log(event);
 
   return (
@@ -67,10 +76,17 @@ const EventPage = async (params: PageProps) => {
       </section>
 
       <div className="min-h-[75vh] text-center px-5 py-16">
+        <EventSection
+          props={{
+            event,
+            title: "About The Event",
+            content: event.description,
+          }}
+        />
 
-        <EventSection props={{ event, title: "About The Event", content: event.description }} />
-          
-       <EventSection props={{ event, title: "Location", content: event.location }} />
+        <EventSection
+          props={{ event, title: "Location", content: event.location }}
+        />
       </div>
     </main>
   );

@@ -29,14 +29,7 @@ export const metadata: Metadata = {
     description: "Discover and attend over 10,000 events worldwide!",
     url: "https://evento.com",
     siteName: "Evento",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Evento - Find events near you",
-    description: "Discover and attend over 10,000 events worldwide!",
-    creator: "@stoia",
-  },
-  
+  }
 };
 
 export default function RootLayout({
