@@ -7,11 +7,7 @@ import React, { useRef } from "react";
 
 const MotionLink = motion(Link);
 
-
-
 export const EventCard = ({ event }: { event: EventType }) => {
-
-
   const ref = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -23,10 +19,16 @@ export const EventCard = ({ event }: { event: EventType }) => {
   const calculatedOpacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
 
   return (
-    <MotionLink ref={ref} className="flex-1 basis-80 h-[380px] max-w-[500px]" href={`/event/${event.slug}`} style={{
-      scale: calculatedScale,
-      opacity: calculatedOpacity,
-    }}>
+    <MotionLink
+      ref={ref}
+      className="flex-1 basis-80 h-[380px] max-w-[500px]"
+      href={`/event/${event.slug}`}
+      style={{
+        scale: calculatedScale,
+        opacity: calculatedOpacity,
+      }}
+      initial={{ scale: 0.8, opacity: 0 }}
+    >
       <section className="relative flex flex-col flex-1 basis-80 h-full w-full bg-white/[3%] rounded-xl overflow-hidden hover:scale-105 active:scale-[1.02] transition">
         <Image
           src={event.imageUrl}
