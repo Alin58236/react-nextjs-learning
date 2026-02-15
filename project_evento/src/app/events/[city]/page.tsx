@@ -39,7 +39,7 @@ const EventsPage = async ({ params, searchParams }: EventsPageProps) => {
         {city === "All" ? "All Events" : `Events in ${city}`}
       </H1>
 
-      <Suspense fallback={<Loading />}>
+      <Suspense key={city+page} fallback={<Loading />}>
         {" "}
         {/* Suspense is used to handle the loading state of the EventsList component. While the data is being fetched, we can show a fallback UI (like a loading spinner) to indicate that the content is loading. Once the data is fetched, the EventsList component will be rendered with the fetched events.*/}
         <EventsList city={city} page={+page} />
