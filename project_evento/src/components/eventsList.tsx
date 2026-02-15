@@ -8,12 +8,15 @@ import PaginationControls from "./paginationControls";
 
 type EventsListComponentProps = {
   city: string;
-  page: number;
+  page?: number;
 };
 
 function calculatePaths(city: string, page: number) {}
 
-export const EventsList = async ({ city, page }: EventsListComponentProps) => {
+export const EventsList = async ({
+  city,
+  page = 1,
+}: EventsListComponentProps) => {
   console.log("Fetching events for city: " + city + " page: " + page);
   const {
     events,
