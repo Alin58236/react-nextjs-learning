@@ -1,7 +1,7 @@
 import React from "react";
 import { EventCard } from "./eventCard";
 import next from "next";
-import { getEventsByCity, getEventsByCityAndPage } from "@/lib/utils";
+import { getEventsByCityAndPage } from "@/lib/server-utils";
 import { EventoEvent } from "@prisma/client";
 import { EventsPageProps } from "@/lib/types";
 import PaginationControls from "./paginationControls";
