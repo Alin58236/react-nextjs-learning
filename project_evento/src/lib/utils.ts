@@ -42,6 +42,39 @@ export async function getEventsByCity(city: string) {
     return events;
 }
 
+export async function getEventsByCityAndPage(city: string, page: number) {
+
+    console.log("Getting events for city:", city, "page:", page);
+    const events: EventoEvent[] = await prisma.eventoEvent.findMany({
+        where: {
+            city: city === "All" ? undefined : capitalize(city),
+        },
+        orderBy: {
+            date: "asc",
+        },
+        take:6, // number of events per page
+        skip: (page - 1) * 6, // skip the events from previous pages    
+    });
+
+    let totalEvents = 0;
+    if(!events || events.length === 0) {
+        return notFound();
+    }
+
+    if(city === "All") {
+        totalEvents = await prisma.eventoEvent.count();
+    } else {
+        totalEvents = await prisma.eventoEvent.count({
+            where: {
+
+    
+            city: city === "All" ? undefined : capitalize(city),
+        },
+    })}
+
+    return { events, totalEvents };
+}
+
 export async function getEventBySlug(slug: string) {
 
     const event = await prisma.eventoEvent.findUnique({

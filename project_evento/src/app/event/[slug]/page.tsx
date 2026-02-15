@@ -33,10 +33,10 @@ const EventPage = async (params: PageProps) => {
     <main>
       <section
         id="introSection"
-        className=" flex  relative  justify-center items-center overflow-hidden -z-1 py-14 md:py-40"
+        className=" flex relative justify-center items-center overflow-hidden -z-1 py-14 md:py-40"
       >
         <Image
-          className="object-cover blur-3xl z-0"
+          className="object-cover blur-3xl z-0 "
           src={event.imageUrl}
           alt="backgroundimg"
           fill
@@ -44,7 +44,7 @@ const EventPage = async (params: PageProps) => {
           sizes="(max-width: 1280px) 100vw, 1280px"
         />
 
-        <div className="z-1 flex flex-col lg:flex-row gap-6 lg:gap-x-16 relative">
+        <div className="z-1 flex flex-col items-center lg:flex-row gap-6 lg:gap-x-16 relative">
           <Image
             className=" rounded-xl border-2 border-white/50 object-cover"
             src={event.imageUrl}
@@ -53,7 +53,7 @@ const EventPage = async (params: PageProps) => {
             height={201}
           />
 
-          <div className="flex flex-col">
+          <div className="flex flex-col itmems-center lg:items-start text-center lg:text-left gap-2">
             <p className="text-white/75">
               {new Date(event.date).toLocaleDateString("en-US", {
                 weekday: "long",
@@ -69,14 +69,14 @@ const EventPage = async (params: PageProps) => {
               Organized By {event.organizerName}
             </p>
 
-            <button className="bg-white/20 text-lg bg-blur capitalize text-white  w-[95vw] sm:w-full rounded-md border-white/10 border-2 py-2 mt-5 lg:mt-auto state-effect">
+            <button className="bg-white/20 text-lg bg-blur capitalize text-white  w-[full] sm:w-full rounded-md border-white/10 border-2 py-2 mt-5 lg:mt-auto state-effect">
               Get Tickets
             </button>
           </div>
         </div>
       </section>
 
-      <div className="min-h-[75vh] text-center px-5 py-16">
+      <div className="min-h-[75vh] text-center px- py-16">
         <EventSection
           props={{
             event,
