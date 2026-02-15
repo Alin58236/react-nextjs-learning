@@ -4,6 +4,7 @@ import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import prisma from "./db";
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 
 //classValue is basically Instanceof and displays the class of the object -> letting me put strings or objects in inputs
 export function cn(...inputs: ClassValue[]) {
@@ -38,7 +39,7 @@ export async function getEventsByCity(city: string) {
     return events;
 }
 
-export async function getEventsByCityAndPage(city: string, page: number) {
+export const getEventsByCityAndPage = unstable_cache( async (city: string, page: number) =>  {
 
     console.log("Getting events for city:", city, "page:", page);
     const events: EventoEvent[] = await prisma.eventoEvent.findMany({
@@ -69,9 +70,9 @@ export async function getEventsByCityAndPage(city: string, page: number) {
     })}
 
     return { events, totalEvents };
-}
+})
 
-export async function getEventBySlug(slug: string) {
+export const getEventBySlug = unstable_cache( async (slug: string) => {
 
     const event = await prisma.eventoEvent.findUnique({
         where: {
@@ -84,7 +85,6 @@ export async function getEventBySlug(slug: string) {
         return notFound();
     }
 
-
     return event;
-}
+})
 

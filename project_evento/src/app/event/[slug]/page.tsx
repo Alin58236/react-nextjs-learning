@@ -1,6 +1,5 @@
 import H1 from "@/components/h1";
 import EventSection from "@/components/eventSection";
-
 import Image from "next/image";
 import React from "react";
 import { getEventBySlug, sleep } from "@/lib/utils";
