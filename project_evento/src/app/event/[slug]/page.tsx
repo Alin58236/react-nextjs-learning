@@ -6,7 +6,7 @@ import React from "react";
 import { getEventBySlug, sleep } from "@/lib/utils";
 import { Metadata } from "next";
 import { get } from "http";
-import { EventoEvent } from "@/generated/prisma/client";
+import { EventoEvent } from "@prisma/client";
 
 type PageProps = {
   params: { slug: string };
@@ -22,6 +22,21 @@ export async function generateMetadata({
     description: "Discover and attend over 10,000 events worldwide!",
   };
 }
+
+
+export async function generateStaticParams() { 
+  // This function is used to generate the static paths for the dynamic route. It fetches all the events and returns an array of objects with the slug of each event. This allows Next.js to pre-render the pages for each event at build time.
+  //good to use for super popular pages that have a lot of traffic and don't change often, but for events that are added frequently, it might not be the best option as it would require rebuilding the entire site every time a new event is added. In such cases, using getServerSideProps or getStaticProps with revalidation might be a better option.
+  
+  return [
+    { slug: "comedy-extravaganza" },
+    { slug: "dj-practice-session" },
+  ] 
+
+  // there is also some prefetching in production due to the fact that our links are in a motion div. All the links that are visible in the viewport of the homepage are prefetched, so when the user clicks on them, the data is already cached and the page loads faster. This is a great feature of Next.js that improves the user experience by reducing the load time of the pages.
+
+}
+
 
 const EventPage = async (params: PageProps) => {
   const { slug } = await params.params;

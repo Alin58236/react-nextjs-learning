@@ -1,4 +1,4 @@
-import { EventoEvent } from "@/generated/prisma/client";
+import { EventoEvent } from "@prisma/client";
 
 
 
