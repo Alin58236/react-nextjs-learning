@@ -29,7 +29,9 @@ async function main() {
     for (const event of events) {
         await prisma.eventoEvent.upsert({
             where: { id: event.id },
-            update: {},
+            update: {
+               
+            },
             create: event,
         });
         console.log(`Upserted event: ${event.name}`);
