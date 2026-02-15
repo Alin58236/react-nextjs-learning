@@ -17,7 +17,7 @@ const Error = ({
   
     return (
     <main className="text-center py-24">
-      <H1 className="mb-5">Something went wrong!</H1>
+      <H1 className="mb-5">{error.message}</H1>
       <button
         onClick={reset}
         className="bg-red-600 text-white px-4 py-2 rounded-md  transition hover:bg-white hover:text-black  focus:outline-none "
