@@ -3,6 +3,7 @@ import { EventoEvent } from "@prisma/client";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import prisma from "./db";
+import { notFound } from "next/navigation";
 
 
 
@@ -34,6 +35,10 @@ export async function getEventsByCity(city: string) {
         },
     });
 
+    if(!events || events.length === 0) {
+        return notFound();
+    }
+
     return events;
 }
 
@@ -45,6 +50,11 @@ export async function getEventBySlug(slug: string) {
         },
         
     });
+
+    if(!event) {
+        return notFound();
+    }
+
 
     return event;
 }
